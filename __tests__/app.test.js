@@ -58,7 +58,74 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/not_a_number")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("Invalid Id!");
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+});
+
+describe("/api/articles/:article_id", () => {
+  test("PATCH:200 updates a votecount of an article by the value received in the request", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: -2,
+      })
+      .expect(200)
+      .then((response) => {
+        expect(response.body.article).toMatchObject({
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
+          article_id: 1,
+          body: "I find this existence challenging",
+          topic: "mitch",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 98,
+        });
+      });
+  });
+  test("PATCH:404 sends an error message when given a valid but non-existent id", () => {
+    return request(app)
+      .patch("/api/articles/666")
+      .send({
+        inc_votes: -2,
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No Article exists with that Id!");
+      });
+  });
+  test("PATCH:400 sends an error message when given an invalid id", () => {
+    return request(app)
+      .patch("/api/articles/not_a_number")
+      .send({
+        inc_votes: -2,
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+  test("PATCH:400 sends an error message when given an invalid type as vote count", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: "a",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+
+  test("PATCH:400 sends an error message when given a wrong key in the body", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        wrong_key: -2,
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
       });
   });
 });
