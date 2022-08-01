@@ -36,3 +36,9 @@ exports.patchVoteById = (article_id, voteNum) => {
       return rows[0];
     });
 };
+
+exports.selectUsers = () => {
+  return db.query("SELECT * FROM users;").then((res) => {
+    return res.rows;
+  });
+};
