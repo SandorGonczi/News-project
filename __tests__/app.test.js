@@ -40,6 +40,7 @@ describe("/api/articles/:article_id", () => {
           article_id: 1,
           body: "I find this existence challenging",
           topic: "mitch",
+          created_at: "2020-07-09T20:11:00.000Z",
           votes: 100,
         });
       });
@@ -57,7 +58,7 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/not_a_number")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("Invalid Id, Id must be a number!");
+        expect(response.body.msg).toBe("Invalid Id!");
       });
   });
 });
