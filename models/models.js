@@ -7,25 +7,21 @@ exports.selectTopics = () => {
 };
 
 exports.selectArticleById = (article_id) => {
-  const prom1 = db.query("SELECT * FROM articles WHERE article_id = $1;", [
-    article_id,
-  ]);
-  const prom2 = db.query(
-    "SELECT COUNT(article_id) AS comment_count FROM comments WHERE article_id = $1;",
-    [article_id]
-  );
-  return Promise.all([prom1, prom2]).then(
-    ([{ rows: rows1 }, { rows: rows2 }]) => {
-      if (!rows1[0]) {
+  return db
+    .query(
+      "SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id HAVING articles.article_id = $1;",
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (!rows[0]) {
         return Promise.reject({
           status: 404,
           msg: "No Article exists with that Id!",
         });
       }
-      rows2[0].comment_count = +rows2[0].comment_count;
-      return { ...rows1[0], ...rows2[0] };
-    }
-  );
+      rows[0].comment_count = +rows[0].comment_count;
+      return rows[0];
+    });
 };
 
 exports.patchVoteById = (article_id, voteNum) => {
