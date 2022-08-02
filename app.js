@@ -4,6 +4,7 @@ const {
   getTopics,
   getArticleById,
   updateVoteById,
+  getUsers,
 } = require("./controllers/contoller");
 
 app.use(express.json());
@@ -12,6 +13,8 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", updateVoteById);
+
+app.get("/api/users", getUsers);
 
 ///////////////////
 

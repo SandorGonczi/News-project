@@ -130,4 +130,18 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
+describe("/api/users", () => {
+  test("GET:200 sends an array of objects with the correct properties to the client", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.users).toEqual(expect.any(Array));
+        expect(Object.keys(response.body.users[0])).toEqual(
+          expect.arrayContaining(["username", "name", "avatar_url"])
+        );
+      });
+  });
+});
+
 afterAll(() => db.end());
