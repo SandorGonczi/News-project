@@ -61,6 +61,23 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Invalid request!");
       });
   });
+  test("GET:200 sends an article object with the correct properties and the coment count to the client", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.article).toMatchObject({
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
+          article_id: 1,
+          body: "I find this existence challenging",
+          topic: "mitch",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 100,
+          comment_count: 11,
+        });
+      });
+  });
 });
 
 describe("/api/articles/:article_id", () => {
