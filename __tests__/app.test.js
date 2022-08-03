@@ -217,7 +217,7 @@ describe.only("/api/articles/:article_id/comments", () => {
         expect(response.body.msg).toBe("Invalid request!");
       });
   });
-  test.only("GET:200 returns an empty array when the article has 0 comments", () => {
+  test("GET:200 returns an empty array when the article has 0 comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
