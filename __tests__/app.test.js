@@ -161,7 +161,7 @@ describe("/api/users", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe.only("/api/articles", () => {
   test("GET:200 sends an array of objects with the correct properties to the client", () => {
     return request(app)
       .get("/api/articles")
@@ -170,6 +170,7 @@ describe("/api/articles", () => {
         const { articles } = response.body;
         expect(articles).toEqual(expect.any(Array));
         expect(articles).toHaveLength(5);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
         articles.forEach((articles) => {
           expect(articles.author).toEqual(expect.any(String));
           expect(articles.article_id).toEqual(expect.any(Number));
