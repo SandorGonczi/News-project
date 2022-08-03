@@ -4,6 +4,8 @@ const {
   patchVoteById,
   selectUsers,
   selectArticles,
+  selectCommentsByArticleId,
+  checkIfArticleExists,
 } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
@@ -41,4 +43,16 @@ exports.getArticles = (req, res, next) => {
   selectArticles().then((articles) => {
     res.status(200).send({ articles });
   });
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  Promise.all([
+    checkIfArticleExists(article_id),
+    selectCommentsByArticleId(article_id),
+  ])
+    .then((comments) => {
+      res.status(200).send({ comments: comments[1] });
+    })
+    .catch(next);
 };
