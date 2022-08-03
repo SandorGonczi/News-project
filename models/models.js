@@ -46,3 +46,14 @@ exports.selectUsers = () => {
     return res.rows;
   });
 };
+
+exports.selectArticles = () => {
+  return db
+    .query(
+      "SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comment_count FROM articles JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY created_at DESC;"
+    )
+    .then(({ rows }) => {
+      rows.forEach((elem) => (elem.comment_count = +elem.comment_count));
+      return rows;
+    });
+};
