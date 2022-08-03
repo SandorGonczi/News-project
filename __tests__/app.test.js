@@ -183,7 +183,7 @@ describe("/api/articles", () => {
   });
 });
 
-describe.only("/api/articles/:article_id/comments", () => {
+describe("/api/articles/:article_id/comments", () => {
   test("GET:200 sends an array of comments objects with the correct properties to the client", () => {
     return request(app)
       .get("/api/articles/1/comments")
