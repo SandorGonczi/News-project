@@ -161,4 +161,25 @@ describe("/api/users", () => {
   });
 });
 
+describe("/api/articles", () => {
+  test("GET:200 sends an array of objects with the correct properties to the client", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles).toEqual(expect.any(Array));
+        expect(articles).toHaveLength(5);
+        articles.forEach((articles) => {
+          expect(articles.author).toEqual(expect.any(String));
+          expect(articles.article_id).toEqual(expect.any(Number));
+          expect(articles.topic).toEqual(expect.any(String));
+          expect(articles.created_at).toEqual(expect.any(String));
+          expect(articles.votes).toEqual(expect.any(Number));
+          expect(articles.comment_count).toEqual(expect.any(Number));
+        });
+      });
+  });
+});
+
 afterAll(() => db.end());
