@@ -346,7 +346,7 @@ describe("/api/articles", () => {
       .get("/api/articles/?topic=paper&sortBy=droptable--")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("Invalid request parameters!");
+        expect(response.body.msg).toBe("Invalid query request!");
       });
   });
   test("GET:404 error message when invalid order value passsed", () => {
@@ -354,7 +354,7 @@ describe("/api/articles", () => {
       .get("/api/articles/?order=droptable--")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("Invalid request parameters!");
+        expect(response.body.msg).toBe("Invalid query request!");
       });
   });
   test("GET:404 error message when invalid query parameters passsed", () => {
@@ -368,7 +368,7 @@ describe("/api/articles", () => {
   test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topi=mitch")
-      .expect(404)
+      .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid Request!");
       });
@@ -376,7 +376,7 @@ describe("/api/articles", () => {
   test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topic=mitch&orde=asc")
-      .expect(404)
+      .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid Request!");
       });
@@ -384,7 +384,7 @@ describe("/api/articles", () => {
   test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topic=mitch&srtByy=votes")
-      .expect(404)
+      .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid Request!");
       });

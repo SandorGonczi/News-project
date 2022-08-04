@@ -45,7 +45,7 @@ exports.getArticles = (req, res, next) => {
   const validQueryKeys = ["sortBy", "order", "topic"];
   for (let key in req.query) {
     if (!validQueryKeys.includes(key)) {
-      res.status(404).send({ msg: "Invalid Request!" });
+      res.status(400).send({ msg: "Invalid Request!" });
     }
   }
   const { sortBy, order, topic } = req.query;

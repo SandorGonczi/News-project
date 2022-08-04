@@ -62,7 +62,7 @@ exports.selectArticles = (topic, sortBy = "created_at", order = "desc") => {
   if (!validSortBy.includes(sortBy) || !validOrder.includes(order)) {
     return Promise.reject({
       status: 404,
-      msg: "Invalid request parameters!",
+      msg: "Invalid query request!",
     });
   }
   let QueryStr =
