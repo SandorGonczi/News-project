@@ -229,4 +229,67 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
+describe("/api/articles/:article_id/comments", () => {
+  const newComment = {
+    username: "lurker",
+    body: "Rolling with the big boys, baby!",
+  };
+  test("POST:201 inserts a comment to the db and sends the comment back to the client", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        const { comment } = response.body;
+        expect(comment.comment_id).toEqual(expect.any(Number));
+        expect(comment.votes).toEqual(0);
+        expect(comment.author).toEqual("lurker");
+        expect(comment.created_at).toEqual(expect.any(String));
+        expect(comment.body).toEqual(newComment.body);
+      });
+  });
+  test("POST:400 responds with an error message when provided wrong body", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        wrong_key: "lurker",
+        body: "Rolling with the big boys, baby!",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+  test("POST:400 responds with an error message when provided wrong body", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: 12,
+        body: "Rolling with the big boys, baby!",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+  test("GET:400 sends an error message when given a valid but non-existent id", () => {
+    return request(app)
+      .post("/api/articles/666/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+  test("GET:400 sends an error message when given an invalid id", () => {
+    return request(app)
+      .post("/api/articles/not_a_number/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+});
+
 afterAll(() => db.end());

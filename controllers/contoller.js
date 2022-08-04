@@ -6,6 +6,7 @@ const {
   selectArticles,
   selectCommentsByArticleId,
   checkIfArticleExists,
+  insertCommentByArticleID,
 } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
@@ -53,6 +54,16 @@ exports.getCommentsByArticleId = (req, res, next) => {
   ])
     .then((comments) => {
       res.status(200).send({ comments: comments[1] });
+    })
+    .catch(next);
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { username, body } = req.body;
+  const { article_id } = req.params;
+  insertCommentByArticleID(article_id, username, body)
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch(next);
 };
