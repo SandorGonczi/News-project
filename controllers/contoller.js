@@ -7,6 +7,7 @@ const {
   selectCommentsByArticleId,
   checkIfArticleExists,
   insertCommentByArticleID,
+  checkIfTopicExists,
 } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
@@ -41,9 +42,18 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
+  const validQueryKeys = ["sortBy", "order", "topic"];
+  for (let key in req.query) {
+    if (!validQueryKeys.includes(key)) {
+      res.status(400).send({ msg: "Invalid Request!" });
+    }
+  }
+  const { sortBy, order, topic } = req.query;
+  Promise.all([checkIfTopicExists(topic), selectArticles(topic, sortBy, order)])
+    .then((articles) => {
+      res.status(200).send({ articles: articles[1] });
+    })
+    .catch(next);
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {

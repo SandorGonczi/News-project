@@ -169,7 +169,7 @@ describe("/api/articles", () => {
       .then((response) => {
         const { articles } = response.body;
         expect(articles).toEqual(expect.any(Array));
-        expect(articles).toHaveLength(5);
+        expect(articles).toHaveLength(12);
         expect(articles).toBeSortedBy("created_at", { descending: true });
         articles.forEach((articles) => {
           expect(articles.author).toEqual(expect.any(String));
@@ -288,6 +288,105 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+});
+
+describe("/api/articles", () => {
+  test("GET:200 sends an array of with the filtered objects by topic ordered by deafult, date desc", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles).toEqual(expect.any(Array));
+        expect(articles).toHaveLength(11);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+        articles.forEach((articles) => {
+          expect(articles.author).toEqual(expect.any(String));
+          expect(articles.article_id).toEqual(expect.any(Number));
+          expect(articles.topic).toEqual(expect.any(String));
+          expect(articles.created_at).toEqual(expect.any(String));
+          expect(articles.votes).toEqual(expect.any(Number));
+          expect(articles.comment_count).toEqual(expect.any(Number));
+        });
+      });
+  });
+  test("GET:200 sends an empty array of with the filtered objects by topic ordered by deafult, date desc", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch&sortBy=votes&order=asc")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles).toEqual(expect.any(Array));
+        expect(articles).toHaveLength(11);
+        expect(articles).toBeSortedBy("votes", { ascending: true });
+        articles.forEach((articles) => {
+          expect(articles.author).toEqual(expect.any(String));
+          expect(articles.article_id).toEqual(expect.any(Number));
+          expect(articles.topic).toEqual(expect.any(String));
+          expect(articles.created_at).toEqual(expect.any(String));
+          expect(articles.votes).toEqual(expect.any(Number));
+          expect(articles.comment_count).toEqual(expect.any(Number));
+        });
+      });
+  });
+  test("GET:200 sends an empty array when the topic has no articles", () => {
+    return request(app)
+      .get("/api/articles/?topic=paper")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles).toEqual(expect.any(Array));
+        expect(articles).toHaveLength(0);
+      });
+  });
+  test("GET:404 error message when invalid order sort by value passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=paper&sortBy=droptable--")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid query request!");
+      });
+  });
+  test("GET:404 error message when invalid order value passsed", () => {
+    return request(app)
+      .get("/api/articles/?order=droptable--")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid query request!");
+      });
+  });
+  test("GET:404 error message when invalid query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=nontopic")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No such topic exist!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topi=mitch")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch&orde=asc")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch&srtByy=votes")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
       });
   });
 });

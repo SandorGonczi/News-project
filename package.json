@@ -33,8 +33,6 @@
     "supertest": "^6.2.4"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ]
+    "setupFilesAfterEnv": ["jest-sorted"]
   }
 }
