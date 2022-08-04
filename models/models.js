@@ -105,6 +105,7 @@ exports.checkIfArticleExists = (article_id) => {
 };
 
 exports.checkIfTopicExists = (topic) => {
+  if (!topic) return topic;
   return db
     .query("SELECT * FROM topics where slug = $1", [topic])
     .then(({ rows }) => {

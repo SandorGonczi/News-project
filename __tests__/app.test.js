@@ -162,7 +162,7 @@ describe("/api/users", () => {
 });
 
 describe("/api/articles", () => {
-  test("GET:200 sends an array of objects with the correct properties to the client", () => {
+  test.only("GET:200 sends an array of objects with the correct properties to the client", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -333,7 +333,7 @@ describe("/api/articles", () => {
   });
   test("GET:200 sends an empty array when the topic has no articles", () => {
     return request(app)
-      .get("/api/articles/?topic=paper&sortBy=votes")
+      .get("/api/articles/?topic=paper")
       .expect(200)
       .then((response) => {
         const { articles } = response.body;
@@ -363,6 +363,30 @@ describe("/api/articles", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("No such topic exist!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topi=mitch")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch&orde=asc")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
+      });
+  });
+  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+    return request(app)
+      .get("/api/articles/?topic=mitch&srtByy=votes")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Request!");
       });
   });
 });
