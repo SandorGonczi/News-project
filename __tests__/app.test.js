@@ -161,7 +161,7 @@ describe("/api/users", () => {
   });
 });
 
-describe.only("/api/articles", () => {
+describe("/api/articles", () => {
   test("GET:200 sends an array of objects with the correct properties to the client", () => {
     return request(app)
       .get("/api/articles")
@@ -179,6 +179,52 @@ describe.only("/api/articles", () => {
           expect(articles.votes).toEqual(expect.any(Number));
           expect(articles.comment_count).toEqual(expect.any(Number));
         });
+      });
+  });
+});
+
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 sends an array of comments objects with the correct properties to the client", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments).toEqual(expect.any(Array));
+        expect(comments).toHaveLength(11);
+        comments.forEach((comments) => {
+          expect(comments.comment_id).toEqual(expect.any(Number));
+          expect(comments.votes).toEqual(expect.any(Number));
+          expect(comments.author).toEqual(expect.any(String));
+          expect(comments.created_at).toEqual(expect.any(String));
+          expect(comments.body).toEqual(expect.any(String));
+        });
+      });
+  });
+  test("GET:404 sends an error message when given a valid but non-existent id", () => {
+    return request(app)
+      .get("/api/articles/666/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No Article exists with that Id!");
+      });
+  });
+  test("GET:400 sends an error message when given an invalid id", () => {
+    return request(app)
+      .get("/api/articles/not_a_number/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
+      });
+  });
+  test("GET:200 returns an empty array when the article has 0 comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments).toEqual(expect.any(Array));
+        expect(comments).toHaveLength(0);
       });
   });
 });
