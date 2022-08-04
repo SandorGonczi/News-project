@@ -162,7 +162,7 @@ describe("/api/users", () => {
 });
 
 describe("/api/articles", () => {
-  test.only("GET:200 sends an array of objects with the correct properties to the client", () => {
+  test("GET:200 sends an array of objects with the correct properties to the client", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
