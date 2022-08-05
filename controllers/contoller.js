@@ -9,6 +9,7 @@ const {
   insertCommentByArticleID,
   checkIfTopicExists,
   removeComment,
+  readApiInfo,
 } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
@@ -84,6 +85,14 @@ exports.deleteComment = (req, res, next) => {
   removeComment(comment_id)
     .then(() => {
       res.sendStatus(204);
+    })
+    .catch(next);
+};
+
+exports.getApiInfo = (req, res, next) => {
+  readApiInfo()
+    .then((apiInfo) => {
+      res.status(200).send({ APIs: apiInfo });
     })
     .catch(next);
 };

@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+
 const {
   getTopics,
   getArticleById,
@@ -9,6 +10,7 @@ const {
   getCommentsByArticleId,
   postCommentByArticleId,
   deleteComment,
+  getApiInfo,
 } = require("./controllers/contoller");
 
 app.use(express.json());
@@ -25,6 +27,8 @@ app.get("/api/users", getUsers);
 
 app.delete("/api/comments/:comment_id", deleteComment);
 
+app.get("/api", getApiInfo);
+
 ///////////////////
 
 app.all("/*", (req, res) => {
@@ -40,6 +44,12 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   if (err.code === "22P02" || "23502" || "23503") {
     res.status(400).send({ msg: "Invalid request!" });
+  } else next(err);
+});
+
+app.use((err, req, res, next) => {
+  if (err.code === "ENOENT") {
+    res.status(500).send({ msg: "Internal server error!" });
   }
 });
 

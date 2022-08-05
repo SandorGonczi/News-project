@@ -5,6 +5,7 @@ const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
 
 beforeEach(() => seed(testData));
+afterAll(() => db.end());
 
 describe("/api/topics", () => {
   test("GET:200 sends an array of objects with the correct properties to the client", () => {
@@ -412,4 +413,13 @@ describe("/api/comments/:comment_id", () => {
   });
 });
 
-afterAll(() => db.end());
+describe("/api", () => {
+  test("GET:200 sends the API info object back to the client", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.APIs).toBeInstanceOf(Object);
+      });
+  });
+});

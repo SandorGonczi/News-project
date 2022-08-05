@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const fs = require("fs/promises");
 
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then((res) => {
@@ -140,5 +141,13 @@ exports.removeComment = (comment_id) => {
         });
       }
       return rows[0];
+    });
+};
+
+exports.readApiInfo = () => {
+  return fs
+    .readFile(`${__dirname}/../endpoints.json`, "UTF-8")
+    .then((apiInfo) => {
+      return JSON.parse(apiInfo);
     });
 };
