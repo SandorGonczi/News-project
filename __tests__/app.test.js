@@ -5,6 +5,7 @@ const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
 
 beforeEach(() => seed(testData));
+afterAll(() => db.end());
 
 describe("/api/topics", () => {
   test("GET:200 sends an array of objects with the correct properties to the client", () => {
@@ -422,5 +423,3 @@ describe("/api", () => {
       });
   });
 });
-
-afterAll(() => db.end());
