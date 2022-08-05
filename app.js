@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+
 const {
   getTopics,
   getArticleById,
@@ -9,6 +10,7 @@ const {
   getCommentsByArticleId,
   postCommentByArticleId,
   deleteComment,
+  getApiInfo,
 } = require("./controllers/contoller");
 
 app.use(express.json());
@@ -24,6 +26,8 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 app.get("/api/users", getUsers);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.get("/api", getApiInfo);
 
 ///////////////////
 

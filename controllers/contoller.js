@@ -10,6 +10,7 @@ const {
   checkIfTopicExists,
   removeComment,
 } = require("../models/models");
+const { apiEndPoints } = require("../endpoints");
 
 exports.getTopics = (req, res, next) => {
   selectTopics().then((topics) => {
@@ -86,4 +87,8 @@ exports.deleteComment = (req, res, next) => {
       res.sendStatus(204);
     })
     .catch(next);
+};
+
+exports.getApiInfo = (req, res, next) => {
+  res.status(200).send({ apiEndPoints });
 };

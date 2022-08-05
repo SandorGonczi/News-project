@@ -412,4 +412,16 @@ describe("/api/comments/:comment_id", () => {
   });
 });
 
+describe.only("/api", () => {
+  test("GET:200 sends the API info object back to the client", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        const { apiEndPoints } = response.body;
+        expect(apiEndPoints).toBeInstanceOf(Object);
+      });
+  });
+});
+
 afterAll(() => db.end());
