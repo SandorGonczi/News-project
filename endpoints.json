@@ -1,0 +1,119 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/topics": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{ "slug": "football", "description": "Footie!" }]
+    }
+  },
+  "GET /api/articles": {
+    "description": "serves an array of articles depending on the queries",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an object of the article with the specified Id",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "author": "author",
+          "title": "Long Title",
+          "article_id": 667,
+          "body": "mybody",
+          "topic": "topic",
+          "created_at": 1527695953341,
+          "votes": 10,
+          "comment_count": 1000
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of comment objects belonging to the requested article id",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+        "comment_id": 667,
+        "votes": 999,
+        "created_at": 1527695953341,
+        "author": "icellrs",
+        "body": "Bodyyyy"
+        }
+      ]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+        "username": "ice",
+        "name": "samual",
+       "avatar_url": "https://avatars2.githubusercontent.com/u/xxxxxxxxxxxxxxx"
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id" :{
+    "description": "updates the comment count of the given article",
+    "queries": [],
+    "body": {
+      "inc_votes": -2
+    },
+    "exampleResponse": {
+      "article": [
+        {
+          "author": "author",
+          "title": "Long Title",
+          "article_id": 667,
+          "body": "mybody",
+          "topic": "topic",
+          "created_at": 1527695953341,
+          "votes": 10,
+          "comment_count": 998
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments" : {
+    "description": "insert a new comment to the given article",
+    "queries": [],
+    "body": {
+      "username": "lurker",
+      "body": "Rolling with the big boys, baby!"
+    },
+    "exampleResponse": {
+      "article": [
+        {
+        "comment_id": 667,
+        "body": "Rolling with the big boys, baby!",
+        "article_id": 1,
+        "author": "lurker",
+        "votes": 0,
+        "created_a": 12345677898765
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the coment with the given id",
+    "queries": [],
+    "exampleResponse": {}
+  }
+}

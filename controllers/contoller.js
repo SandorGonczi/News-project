@@ -9,8 +9,8 @@ const {
   insertCommentByArticleID,
   checkIfTopicExists,
   removeComment,
+  readApiInfo,
 } = require("../models/models");
-const { apiEndPoints } = require("../endpoints");
 
 exports.getTopics = (req, res, next) => {
   selectTopics().then((topics) => {
@@ -90,5 +90,9 @@ exports.deleteComment = (req, res, next) => {
 };
 
 exports.getApiInfo = (req, res, next) => {
-  res.status(200).send({ apiEndPoints });
+  readApiInfo()
+    .then((apiInfo) => {
+      res.status(200).send({ APIs: apiInfo });
+    })
+    .catch(next);
 };
