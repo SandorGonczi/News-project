@@ -365,7 +365,7 @@ describe("/api/articles", () => {
         expect(response.body.msg).toBe("No such topic exist!");
       });
   });
-  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+  test("GET:400 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topi=mitch")
       .expect(400)
@@ -373,7 +373,7 @@ describe("/api/articles", () => {
         expect(response.body.msg).toBe("Invalid Request!");
       });
   });
-  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+  test("GET:400 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topic=mitch&orde=asc")
       .expect(400)
@@ -381,12 +381,33 @@ describe("/api/articles", () => {
         expect(response.body.msg).toBe("Invalid Request!");
       });
   });
-  test("GET:404 error message when misspelled query key passed query parameters passsed", () => {
+  test("GET:400 error message when misspelled query key passed query parameters passsed", () => {
     return request(app)
       .get("/api/articles/?topic=mitch&srtByy=votes")
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid Request!");
+      });
+  });
+});
+describe("/api/comments/:comment_id", () => {
+  test("DELETE:204 deletes comment with the given id from the database", () => {
+    return request(app).delete("/api/comments/2").expect(204);
+  });
+  test("DELETE:404 responds with an error message when given a non-existent but valid id", () => {
+    return request(app)
+      .delete("/api/comments/666")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No comment exists with that Id!");
+      });
+  });
+  test("DELETE:400 responds with an error message when given an invalid id", () => {
+    return request(app)
+      .delete("/api/comments/non-valid-id")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid request!");
       });
   });
 });
