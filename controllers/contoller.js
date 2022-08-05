@@ -8,6 +8,7 @@ const {
   checkIfArticleExists,
   insertCommentByArticleID,
   checkIfTopicExists,
+  removeComment,
 } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
@@ -74,6 +75,15 @@ exports.postCommentByArticleId = (req, res, next) => {
   insertCommentByArticleID(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeComment(comment_id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(next);
 };
