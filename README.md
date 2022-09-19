@@ -1,11 +1,17 @@
-# News Project API
+# Salford News Project API
 
-## In Order To Run
+## Summary
 
-This project requries two databases. One for real looking dev data and another for simpler test data.
+A simple news API built with the Express framework on Node.js. The project sets up the basic back end infrastructure for news style website with endpoints allow the client to query the articles from the database, fetch, post and delete comments.
 
-In order to run the project it needs the environmental variables correctly set up.
-The neccecary enrv.env files for your project: .env.test and .env.development. Into each, add PGDATABASE=<database_name_here>, with the correct database name for that environment (see /db/setup.sql for the database names).
-dotenv documentation : https://www.npmjs.com/package/dotenv
+The server is hosted at https://salford-news.herokuapp.com/api where you can check the endpoints' descriptions.
 
-Make sure you install dotenv and other dependencies, see package.json file.
+# In Ordr to Run Locally
+
+To run locally the server needs postgreSQL to be installed and the database seeded.
+
+Once the database is installed run the "setup-dbs" script to create the databases in in the postgres.
+
+Before seeding the databse the the environmental variables correctly need to be set up. The neccecary .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=<database_name_here>, with the correct database name for that environment (nc_news_test and nc_news respectively). These files should be included in your .gitignore file.
+
+Make sure you install all the dependencies.
